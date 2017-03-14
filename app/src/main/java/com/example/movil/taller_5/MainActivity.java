@@ -1,14 +1,16 @@
 package com.example.movil.taller_5;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.movil.taller_5.DAO.DataEntryDAO;
 import com.example.movil.taller_5.Model.Note;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity{
     private DataEntryDAO mDataEntryDAO;
     private ListView list;
     private ViewAdapter adapter;
+    private Context mycontext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,54 +31,72 @@ public class MainActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Note note = new Note("hola", "mundo");
-                Toast.makeText(getApplicationContext(), "fecha: " + note.getDate(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        mycontext = this;
 
-        mDataEntryDAO = new DataEntryDAO(getApplicationContext());
+        mDataEntryDAO = new DataEntryDAO(mycontext);
 
         list = (ListView) findViewById(R.id.list);
-        //loadData();
-        List<Note> entries = mDataEntryDAO.getAllEntries();
 
-        adapter = new ViewAdapter(getApplicationContext(), entries);
+        List<Note> entries = mDataEntryDAO.getAllEntries();
+        adapter = new ViewAdapter(mycontext, entries);
         list.setDivider(null);
         list.setAdapter(adapter);
+        loadData();
     }
 
     public void openNote(View view) {
-        System.out.println("ENTRO");
+        int index = (Integer) view.getTag();
+        Note note = mDataEntryDAO.geDataEntry(index);
+        Intent i = new Intent(this, note.class);
+        i.putExtra("note", note);
 
-        int position = (Integer) view.getTag();
+        startActivityForResult(i, index);
+    }
 
-        System.out.println("posicion: " + position);
+    public void createNote(View view) {
+        //long index = mDataEntryDAO.addDataEntry(new Note("hola", "mundo"));
+        //Note note = mDataEntryDAO.geDataEntry((int) index);
+        Note note = new Note();
+        note.setId(15);
+        Intent i = new Intent(this, note.class);
+        i.putExtra("note", note);
+
+        startActivityForResult(i, note.getId());
     }
 
     private void loadData(){
         List<Note> entries = mDataEntryDAO.getAllEntries();
-
-        adapter = new ViewAdapter(getApplicationContext(), entries);
-        list.setDivider(null);
-        list.setAdapter(adapter);
+        adapter.setData(entries);
+        ((ViewAdapter) list.getAdapter()).notifyDataSetChanged();
     }
 
+    private Note entry;
+
     public void deleteNote(View view) {
-
         int position = (Integer) view.getTag();
+        entry = mDataEntryDAO.geDataEntry(position);
+        new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle("Eliminar Nota")
+            .setMessage("¿Estas seguro de eliminar la nota " + entry.getTitle() + "?")
+            .setPositiveButton("Si", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mDataEntryDAO.deleteEntry(entry);
+                    loadData();
+                }
 
-        System.out.println("posicion: "+position);
+            })
+            .setNegativeButton("No", null)
+            .show();
+    }
 
-        Note entry = mDataEntryDAO.getAllEntries().get(position);
-
-        System.out.println(entry.getId());
-
-        mDataEntryDAO.deleteEntry(entry);
-        loadData();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            loadData();
+        }
     }
 
     @Override

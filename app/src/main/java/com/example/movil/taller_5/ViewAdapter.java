@@ -28,6 +28,10 @@ public class ViewAdapter extends BaseAdapter {
         this.data = data;
     }
 
+    public void setData(List<Note> data) {
+        this.data = data;
+    }
+
     @Override
     public int getCount() {
         return data.size();
@@ -45,7 +49,7 @@ public class ViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        Note note = data.get(position);
+        Note note = (Note) getItem(position);
 
         if(view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

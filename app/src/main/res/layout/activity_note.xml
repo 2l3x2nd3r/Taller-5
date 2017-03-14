@@ -6,11 +6,39 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context="com.example.movil.taller_5.note">
+    tools:context="com.example.movil.taller_5.note"
+    android:weightSum="1">
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
+    <EditText
+        android:hint="Titulo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView" />
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etTitle" />
+
+    <EditText
+        android:hint="Contenido"
+        android:layout_width="match_parent"
+        android:layout_height="372dp"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/etContent"
+        android:background="@drawable/border"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|bottom">
+
+        <Button
+            android:text="Guardar"
+            android:layout_width="145dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnSave"
+            android:layout_gravity="center_horizontal|center"
+            android:onClick="saveData"/>
+    </LinearLayout>
+
 </LinearLayout>

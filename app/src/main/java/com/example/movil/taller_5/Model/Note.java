@@ -1,5 +1,6 @@
 package com.example.movil.taller_5.Model;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,7 +8,7 @@ import java.util.Date;
 /**
  * Created by movil on 3/13/17.
  */
-public class Note {
+public class Note implements Serializable {
     private int id;
     private String title;
     private String content;
@@ -16,7 +17,7 @@ public class Note {
     public Note() {
     }
 
-    public Note(int id, String date, String content, String title) {
+    public Note(int id, String title, String content, String date) {
         this.id = id;
         this.date = date;
         this.content = content;
