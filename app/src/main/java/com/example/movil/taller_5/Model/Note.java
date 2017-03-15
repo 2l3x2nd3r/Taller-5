@@ -28,19 +28,13 @@ public class Note implements Serializable {
         this.id = id;
         this.title = title;
         this.content = content;
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        DateFormat df = new SimpleDateFormat("dd/MM/yy");
-        this.date = df.format(date);
+        setDate();
     }
 
     public Note(String title, String content) {
         this.title = title;
         this.content = content;
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        DateFormat df = new SimpleDateFormat("dd/MM/yy");
-        this.date = df.format(date);
+        setDate();
     }
 
     public int getId() {
@@ -71,7 +65,15 @@ public class Note implements Serializable {
         return date;
     }
 
+    public void setDate() {
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        DateFormat df = new SimpleDateFormat("dd/MM/yy");
+        this.date = df.format(date);
+    }
+
     public void setDate(String date) {
         this.date = date;
     }
+
 }

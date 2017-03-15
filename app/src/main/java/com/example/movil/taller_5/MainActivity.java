@@ -46,19 +46,18 @@ public class MainActivity extends AppCompatActivity{
 
     public void openNote(View view) {
         int index = (Integer) view.getTag();
-        Note note = mDataEntryDAO.geDataEntry(index);
-        Intent i = new Intent(this, note.class);
+        Note note = mDataEntryDAO.getDataEntry(index);
+        Intent i = new Intent(mycontext, note.class);
         i.putExtra("note", note);
 
         startActivityForResult(i, index);
     }
 
     public void createNote(View view) {
-        //long index = mDataEntryDAO.addDataEntry(new Note("hola", "mundo"));
-        //Note note = mDataEntryDAO.geDataEntry((int) index);
-        Note note = new Note();
-        note.setId(15);
-        Intent i = new Intent(this, note.class);
+        long index = mDataEntryDAO.addDataEntry(new Note());
+        Note note = mDataEntryDAO.getDataEntry((int) index);
+
+        Intent i = new Intent(mycontext, note.class);
         i.putExtra("note", note);
 
         startActivityForResult(i, note.getId());
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity{
 
     public void deleteNote(View view) {
         int position = (Integer) view.getTag();
-        entry = mDataEntryDAO.geDataEntry(position);
+        entry = mDataEntryDAO.getDataEntry(position);
         new AlertDialog.Builder(this)
             .setIcon(android.R.drawable.ic_dialog_alert)
             .setTitle("Eliminar Nota")

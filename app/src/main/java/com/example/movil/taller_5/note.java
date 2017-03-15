@@ -1,6 +1,7 @@
 package com.example.movil.taller_5;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -16,13 +17,16 @@ public class note extends AppCompatActivity {
     private Note note;
     private EditText etTitle;
     private EditText etContent;
+    private Context mycontext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
-        mDataEntryDAO = new DataEntryDAO(getApplicationContext());
+        mycontext = this;
+
+        mDataEntryDAO = new DataEntryDAO(mycontext);
         etTitle = (EditText) findViewById(R.id.etTitle);
         etContent = (EditText) findViewById(R.id.etContent);
 
@@ -35,15 +39,18 @@ public class note extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        saveData(null);
+        updateData(null);
     }
 
-    private void saveData(View view) {
+    public void updateData(View view) {
         String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
-        if(!title.isEmpty() && !content.isEmpty()){
-            Note entry = new Note(title, content);
-            mDataEntryDAO.updateEntry(entry);
+
+        if(!title.isEmpty()){
+            note.setTitle(title);
+            note.setContent(content);
+            note.setDate();
+            mDataEntryDAO.updateEntry(note);
             Intent i = new Intent();
             setResult(Activity.RESULT_OK, i);
             finish();

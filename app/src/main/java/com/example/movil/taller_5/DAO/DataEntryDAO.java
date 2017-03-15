@@ -56,7 +56,7 @@ public class DataEntryDAO {
     }
 
     // Getting single entry
-    public Note geDataEntry(int id) {
+    public Note getDataEntry(int id) {
 
         Cursor cursor = mDatabase.query(
                 DatabaseHandler.TABLE,

@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/btnSave"
             android:layout_gravity="center_horizontal|center"
-            android:onClick="saveData"/>
+            android:onClick="updateData"/>
     </LinearLayout>
 
 </LinearLayout>
